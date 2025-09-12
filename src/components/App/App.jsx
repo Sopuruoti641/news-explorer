@@ -27,35 +27,49 @@ function App() {
   const [error, setError] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const location = useLocation();
+  const currentPath = location.pathname;
+  const isSavedArticlesPage =
+    currentPath === "/saved-articles" ||
+    currentPath === "/news-explorer/saved-articles";
 
-  const handleSignInClick = () => setActiveModal("login");
+  const handleSignInClick = () => {
+    setActiveModal("login");
+  };
   const handleSignUpLinkClick = () => {
     closeActiveModal();
     setActiveModal("sign-up");
   };
+
   const handleLoginLinkClick = () => {
     closeActiveModal();
     setActiveModal("login");
   };
-  const closeActiveModal = () => setActiveModal("");
 
   const handleRegistrationSubmit = async ({ email, password, name }) => {
     try {
-      localStorage.setItem(
-        "userData",
-        JSON.stringify({ name, email, password })
+      console.log("Starting registration with:", { email, name });
+      const userData = { name, email, password };
+      console.log("About to store userData:", userData);
+      localStorage.setItem("userData", JSON.stringify(userData));
+      console.log(
+        "Checking localStorage after setting:",
+        localStorage.getItem("userData")
       );
+
       const data = await authorize(email, password);
+      console.log("Authorize response:", data);
       if (data.token) {
         localStorage.setItem("jwt", data.token);
         const userData = await checkToken(data.token);
+        console.log("CheckToken response:", userData);
         if (userData.data) {
           closeActiveModal();
           setActiveModal("success");
         }
       }
-    } catch (err) {
-      console.error("Registration error:", err);
+    } catch (error) {
+      console.error("Registration error:", error);
     }
   };
 
@@ -71,8 +85,8 @@ function App() {
           closeActiveModal();
         }
       }
-    } catch (err) {
-      console.error("Login error:", err);
+    } catch (error) {
+      console.error("Login error:", error);
     }
   };
 
@@ -81,36 +95,6 @@ function App() {
     setIsLoggedIn(false);
     localStorage.removeItem("jwt");
   };
-
-  const handleSearch = async (searchQuery) => {
-    setIsLoading(true);
-    setError(null);
-    setNoResults(false);
-    setArticles([]);
-    try {
-      const response = await fetchNewsArticles(searchQuery);
-      if (!response.articles || response.articles.length === 0) {
-        setNoResults(true);
-      } else {
-        setArticles(
-          response.articles.map((article) => ({
-            ...article,
-            keyword: searchQuery,
-          }))
-        );
-        setVisibleCount(3);
-      }
-    } catch (err) {
-      console.error("Search error:", err);
-      setError("Sorry, something went wrong. Please try again later.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    setSavedArticles(JSON.parse(localStorage.getItem("savedArticles")) || []);
-  }, []);
 
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
@@ -122,122 +106,145 @@ function App() {
             setIsLoggedIn(true);
           }
         })
-        .catch(() => localStorage.removeItem("jwt"));
+        .catch((err) => {
+          console.error(err);
+          localStorage.removeItem("jwt");
+        });
     }
   }, []);
 
-  const handleSaveArticle = (article) => {
-    const exists = savedArticles.find((a) => a.url === article.url);
-    let updated;
-    if (exists) {
-      updated = savedArticles.filter((a) => a.url !== article.url);
-    } else {
-      updated = [...savedArticles, { ...article, id: Date.now() }];
+  const closeActiveModal = () => {
+    setActiveModal("");
+  };
+
+  const handleSearch = async (searchQuery) => {
+    setIsLoading(true);
+    setError(null);
+    setNoResults(false);
+    setArticles([]);
+
+    try {
+      const response = await fetchNewsArticles(searchQuery);
+
+      if (!response.articles || response.articles.length === 0) {
+        setNoResults(true);
+      } else {
+        const articlesWithKeyword = response.articles.map((article) => ({
+          ...article,
+          keyword: searchQuery,
+        }));
+        setArticles(articlesWithKeyword);
+        setVisibleCount(3);
+      }
+    } catch (err) {
+      console.error("Search error:", err);
+      setError(
+        "Sorry, something went wrong during the request. Please try again later."
+      );
+    } finally {
+      setIsLoading(false);
     }
-    setSavedArticles(updated);
-    localStorage.setItem("savedArticles", JSON.stringify(updated));
   };
 
-  // ✅ NavigationWrapper inside App so handleSearch is in scope
-  const NavigationWrapper = ({
-    isLoggedIn,
-    currentUser,
-    handleSignInClick,
-    handleLogout,
-    isModalOpen,
-  }) => {
-    const location = useLocation();
-    const isSavedArticlesPage =
-      location.pathname === "/saved-articles" ||
-      location.pathname === "/news-explorer/saved-articles";
+  useEffect(() => {
+    if (isSavedArticlesPage) {
+      setArticles([]);
+      setNoResults(false);
+      setError(null);
+      setVisibleCount(3);
+    }
+  }, [isSavedArticlesPage]);
 
-    return isSavedArticlesPage ? (
-      <Navigation
-        isLoggedIn={isLoggedIn}
-        handleSignInClick={handleSignInClick}
-        currentUser={currentUser}
-        handleLogout={handleLogout}
-        isModalOpen={isModalOpen}
-      />
-    ) : (
-      <Header
-        isLoggedIn={isLoggedIn}
-        handleSignInClick={handleSignInClick}
-        currentUser={currentUser}
-        handleLogout={handleLogout}
-        isModalOpen={isModalOpen}
-        handleSearch={handleSearch} // ✅ now in scope
-      />
-    );
+  const handleSaveArticle = (article) => {
+    const existing = savedArticles.find((a) => a.url === article.url);
+
+    if (existing) {
+      const updated = savedArticles.filter((a) => a.url !== article.url);
+      setSavedArticles(updated);
+    } else {
+      const newArticle = {
+        ...article,
+        id: Date.now(),
+      };
+      setSavedArticles([...savedArticles, newArticle]);
+    }
   };
+
+  useEffect(() => {
+    localStorage.setItem("savedArticles", JSON.stringify(savedArticles));
+  }, [savedArticles]);
 
   return (
-    <BrowserRouter basename="/news-explorer">
-      <div className="app">
-        <NavigationWrapper
+    <div className="app">
+      {isSavedArticlesPage ? (
+        <Navigation
           isLoggedIn={isLoggedIn}
-          currentUser={currentUser}
           handleSignInClick={handleSignInClick}
+          currentUser={currentUser}
           handleLogout={handleLogout}
           isModalOpen={activeModal !== ""}
         />
-
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Main
-                articles={articles}
-                savedArticles={savedArticles}
-                isLoading={isLoading}
-                noResults={noResults}
-                error={error}
-                visibleCount={visibleCount}
-                setVisibleCount={setVisibleCount}
+      ) : (
+        <Header
+          handleSignInClick={handleSignInClick}
+          currentUser={currentUser}
+          handleLogout={handleLogout}
+          onSearchResults={handleSearch}
+          isLoggedIn={isLoggedIn}
+          isModalOpen={activeModal !== ""}
+        />
+      )}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Main
+              articles={articles}
+              savedArticles={savedArticles}
+              isLoading={isLoading}
+              noResults={noResults}
+              error={error}
+              visibleCount={visibleCount}
+              setVisibleCount={setVisibleCount}
+              isLoggedIn={isLoggedIn}
+              handleSaveArticle={handleSaveArticle}
+            />
+          }
+        />
+        <Route
+          path="/saved-articles"
+          element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}>
+              <SavedNews
                 isLoggedIn={isLoggedIn}
+                handleLogout={handleLogout}
+                currentUser={currentUser}
+                savedArticles={savedArticles}
                 handleSaveArticle={handleSaveArticle}
               />
-            }
-          />
-          <Route
-            path="/saved-articles"
-            element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <SavedNews
-                  isLoggedIn={isLoggedIn}
-                  handleLogout={handleLogout}
-                  currentUser={currentUser}
-                  savedArticles={savedArticles}
-                  handleSaveArticle={handleSaveArticle}
-                />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-
-        <Footer />
-
-        <LoginModal
-          isOpen={activeModal === "login"}
-          onClose={closeActiveModal}
-          handleSignUpLinkClick={handleSignUpLinkClick}
-          handleLoginSubmit={handleLoginSubmit}
+            </ProtectedRoute>
+          }
         />
-
-        <RegisterModal
-          isOpen={activeModal === "sign-up"}
-          onClose={closeActiveModal}
-          handleLoginLinkClick={handleLoginLinkClick}
-          handleRegistrationSubmit={handleRegistrationSubmit}
-        />
-
-        <SuccessModal
-          isOpen={activeModal === "success"}
-          onClose={closeActiveModal}
-          handleLoginLinkClick={handleLoginLinkClick}
-        />
-      </div>
-    </BrowserRouter>
+      </Routes>
+      <Footer />
+      <LoginModal
+        isOpen={activeModal === "login"}
+        onClose={closeActiveModal}
+        handleSignUpLinkClick={handleSignUpLinkClick}
+        handleLoginSubmit={handleLoginSubmit}
+      />
+      <RegisterModal
+        isOpen={activeModal === "sign-up"}
+        onClose={closeActiveModal}
+        handleLoginLinkClick={handleLoginLinkClick}
+        handleRegistrationSubmit={handleRegistrationSubmit}
+      />
+      <SuccessModal
+        isOpen={activeModal === "success"}
+        onClose={closeActiveModal}
+        handleLoginLinkClick={handleLoginLinkClick}
+      />
+    </div>
   );
 }
 

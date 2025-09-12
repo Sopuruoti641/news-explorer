@@ -4,8 +4,7 @@ import "./Main.css";
 import Preloader from "../Preloader/Predloader";
 import NotFound from "../NotFound/NotFound";
 import About from "../About/About";
-import NewsCardList from "../NewsCards/NewsCards";
-import SearchForm from "../SearchForm/SearchForm"; // ✅ import it
+import NewsCards from "../NewsCards/NewsCards";
 
 function Main({
   articles,
@@ -17,13 +16,10 @@ function Main({
   isLoggedIn,
   handleSaveArticle,
   savedArticles,
-  handleSearch, // ✅ add this prop
+  isSaved,
 }) {
   return (
     <main className="main">
-      {/* ✅ put search bar at the top */}
-      {/* <SearchForm onSearchResults={handleSearch} /> */}
-
       {isLoading && <Preloader text="Searching for news..." />}
 
       {error && !isLoading && <p className="main__error">{error}</p>}
@@ -34,7 +30,7 @@ function Main({
         articles &&
         articles.length > 0 && (
           <section className="main__news-conatiner">
-            <NewsCardList
+            <NewsCards
               articles={articles}
               visibleCount={visibleCount}
               setVisibleCount={setVisibleCount}
@@ -44,9 +40,7 @@ function Main({
             />
           </section>
         )}
-
       {noResults && <NotFound />}
-
       <section className="main__about">
         <About />
       </section>

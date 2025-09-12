@@ -1,5 +1,5 @@
 import "./NewsCard.css";
-import { formatDate } from "../../utils/helpers";
+import { formatDate } from "../../utils/helpers.js";
 import { useLocation } from "react-router-dom";
 import placeholderImage from "../../assets/Images/placeholder.jpg";
 
@@ -11,28 +11,32 @@ function NewsCard({
   description,
   source,
   handleSaveArticle,
+  savedArticles,
   keyword,
   url,
-  savedArticles, // ✅ get full list
 }) {
   const location = useLocation();
   const isSavedArticlesPage = location.pathname.includes("saved-articles");
   const formattedDate = formatDate(date);
 
-  // ✅ Calculate isSaved using current savedArticles
+  // Check if this article is saved based on savedArticles prop
+  const normalizeUrl = (url) => url?.trim().toLowerCase();
+
   const isSaved = savedArticles?.some(
-    (savedArticle) => savedArticle.url === url
+    (savedArticle) => normalizeUrl(savedArticle.url) === normalizeUrl(url)
   );
 
   const handleSaveClick = (e) => {
     e.stopPropagation();
-    if (!isLoggedIn) return;
+    e.currentTarget.blur(); // Fixes mobile focus bug
+
+    if (!isLoggedIn) return; // ✅ Only block if not logged in
 
     const articleToSave = {
       title,
       description,
       url,
-      urlToImage: image,
+      urlToImage: image || placeholderImage,
       publishedAt: date,
       source: { name: source },
       keyword,
@@ -46,45 +50,50 @@ function NewsCard({
     : `newsCard__save-btn ${isSaved ? "newsCard__save-btn-saved" : ""}`;
 
   return (
-    <article className="newsCard">
-      <div className="newsCard__button-wrapper">
-        <button
-          type="button"
-          className={buttonClassName}
-          onClick={handleSaveClick}
-        >
-          {!isLoggedIn && !isSavedArticlesPage && (
-            <span className="newsCard__tooltip">Sign in to save articles</span>
-          )}
-          {isSavedArticlesPage && (
-            <span className="newsCard__tooltip">Remove from saved</span>
-          )}
-        </button>
-        {isSavedArticlesPage && keyword && (
-          <div className="newsCard__keyword">
-            {keyword.charAt(0).toUpperCase() + keyword.slice(1)}
-          </div>
-        )}
-      </div>
-
-      <a
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="newsCard__link-wrapper"
+    <article
+      className="newsCard"
+      tabIndex="-1"
+      onClick={(e) => {
+        // Prevent open if clicking a button inside the card
+        if (e.target.closest("button")) return;
+        window.open(url, "_blank");
+      }}
+    >
+      <img
+        src={image || placeholderImage}
+        alt={title}
+        className="newsCard__image"
+      />
+      {isSavedArticlesPage && keyword && (
+        <div className="newsCard__keyword">
+          {keyword.charAt(0).toUpperCase() + keyword.slice(1)}
+        </div>
+      )}
+      <button
+        type="button"
+        className={buttonClassName}
+        onClick={handleSaveClick}
+        aria-label={
+          isSavedArticlesPage
+            ? "Remove from saved"
+            : isSaved
+            ? "Unsave article"
+            : "Save article"
+        }
       >
-        <img
-          src={image || placeholderImage}
-          alt={title || "Placeholder image"}
-          className="newsCard__image"
-        />
-        <section className="newsCard__content">
-          <p className="newsCard__date">{formattedDate}</p>
-          <h2 className="newsCard__title">{title}</h2>
-          <p className="newsCard__description">{description}</p>
-          <p className="newsCard__source">{source}</p>
-        </section>
-      </a>
+        {!isLoggedIn && !isSavedArticlesPage && (
+          <span className="newsCard__tooltip">Sign in to save articles</span>
+        )}
+        {isSavedArticlesPage && (
+          <span className="newsCard__tooltip">Remove from saved</span>
+        )}
+      </button>
+      <section className="newsCard__content">
+        <p className="newsCard__date">{formattedDate}</p>
+        <h2 className="newsCard__title">{title}</h2>
+        <p className="newsCard__description">{description}</p>
+        <p className="newsCard__source">{source}</p>
+      </section>
     </article>
   );
 }
