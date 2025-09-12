@@ -6,7 +6,7 @@ import facebookIcon from "../../assets/Images/facebook-icon.svg";
 function Footer() {
   return (
     <footer className="footer">
-      <p className="footer__text">© 2024 Supersite, Powered by News API</p>
+      <p className="footer__text">© 2025 Supersite, Powered by News API</p>
       <div className="footer__links">
         <nav className="footer__nav">
           <ul className="footer__nav-list">

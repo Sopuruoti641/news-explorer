@@ -14,37 +14,6 @@ import SuccessModal from "../SuccessModal/SuccessModal";
 import ProtectedRoute from "../ProtectedRoute";
 import Navigation from "../Navigation/Navigation";
 
-function NavigationWrapper({
-  isLoggedIn,
-  currentUser,
-  handleSignInClick,
-  handleLogout,
-  isModalOpen,
-}) {
-  const location = useLocation();
-  const isSavedArticlesPage =
-    location.pathname === "/saved-articles" ||
-    location.pathname === "/news-explorer/saved-articles";
-
-  return isSavedArticlesPage ? (
-    <Navigation
-      isLoggedIn={isLoggedIn}
-      handleSignInClick={handleSignInClick}
-      currentUser={currentUser}
-      handleLogout={handleLogout}
-      isModalOpen={isModalOpen}
-    />
-  ) : (
-    <Header
-      isLoggedIn={isLoggedIn}
-      handleSignInClick={handleSignInClick}
-      currentUser={currentUser}
-      handleLogout={handleLogout}
-      isModalOpen={isModalOpen}
-    />
-  );
-}
-
 function App() {
   const [activeModal, setActiveModal] = useState("");
   const [articles, setArticles] = useState([]);
@@ -113,20 +82,6 @@ function App() {
     localStorage.removeItem("jwt");
   };
 
-  useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
-    if (jwt) {
-      checkToken(jwt)
-        .then((userData) => {
-          if (userData.data) {
-            setCurrentUser(userData.data);
-            setIsLoggedIn(true);
-          }
-        })
-        .catch(() => localStorage.removeItem("jwt"));
-    }
-  }, []);
-
   const handleSearch = async (searchQuery) => {
     setIsLoading(true);
     setError(null);
@@ -147,9 +102,7 @@ function App() {
       }
     } catch (err) {
       console.error("Search error:", err);
-      setError(
-        "Sorry, something went wrong during the request. Please try again later."
-      );
+      setError("Sorry, something went wrong. Please try again later.");
     } finally {
       setIsLoading(false);
     }
@@ -157,6 +110,20 @@ function App() {
 
   useEffect(() => {
     setSavedArticles(JSON.parse(localStorage.getItem("savedArticles")) || []);
+  }, []);
+
+  useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
+      checkToken(jwt)
+        .then((userData) => {
+          if (userData.data) {
+            setCurrentUser(userData.data);
+            setIsLoggedIn(true);
+          }
+        })
+        .catch(() => localStorage.removeItem("jwt"));
+    }
   }, []);
 
   const handleSaveArticle = (article) => {
@@ -169,6 +136,39 @@ function App() {
     }
     setSavedArticles(updated);
     localStorage.setItem("savedArticles", JSON.stringify(updated));
+  };
+
+  // ✅ NavigationWrapper inside App so handleSearch is in scope
+  const NavigationWrapper = ({
+    isLoggedIn,
+    currentUser,
+    handleSignInClick,
+    handleLogout,
+    isModalOpen,
+  }) => {
+    const location = useLocation();
+    const isSavedArticlesPage =
+      location.pathname === "/saved-articles" ||
+      location.pathname === "/news-explorer/saved-articles";
+
+    return isSavedArticlesPage ? (
+      <Navigation
+        isLoggedIn={isLoggedIn}
+        handleSignInClick={handleSignInClick}
+        currentUser={currentUser}
+        handleLogout={handleLogout}
+        isModalOpen={isModalOpen}
+      />
+    ) : (
+      <Header
+        isLoggedIn={isLoggedIn}
+        handleSignInClick={handleSignInClick}
+        currentUser={currentUser}
+        handleLogout={handleLogout}
+        isModalOpen={isModalOpen}
+        handleSearch={handleSearch} // ✅ now in scope
+      />
+    );
   };
 
   return (
