@@ -7,6 +7,5 @@ This is a News explorer web application where users can search News articles bas
 ## Links
 
 - [Figma Design](https://www.figma.com/design/3ottwMEhlBt95Dbn8dw1NH/Your-Final-Project?node-id=0-1&p=f)
-
-- [News Api](https://newsapi.org/)
-- [Deployment link](https://sopuruoti641.github.io/news-explorer/)
+- [API](https://newsapi.org/)
+- [Deployment Link](https://sopuruoti641.github.io/news-explorer/)
