@@ -37,6 +37,7 @@
   border-radius: 80px;
   border: none;
   background-color: #ffffff;
+  cursor: pointer;
 }
 
 .news-cards__show-more-btn:hover {
