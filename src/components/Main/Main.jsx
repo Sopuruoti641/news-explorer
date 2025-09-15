@@ -16,7 +16,6 @@ function Main({
   isLoggedIn,
   handleSaveArticle,
   savedArticles,
-  isSaved,
 }) {
   return (
     <main className="main">

@@ -35,7 +35,7 @@ function LoginModal({
       setValues({ email: "", password: "" });
       setErrors({});
     }
-  }, [isOpen]);
+  }, [isOpen, setValues, setErrors]);
 
   return (
     <ModalWithForm

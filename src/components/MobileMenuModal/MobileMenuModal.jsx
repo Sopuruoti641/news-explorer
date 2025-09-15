@@ -7,7 +7,6 @@ function MobileMenuModal({
   onClose,
   isLoggedIn,
   handleLogout,
-  currentUser,
 }) {
   return (
     <div

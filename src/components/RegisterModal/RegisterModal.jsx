@@ -33,7 +33,7 @@ function RegisterModal({
       setValues({ email: "", password: "", name: "" });
       setErrors({});
     }
-  }, [isOpen]);
+  }, [isOpen, setValues, setErrors]);
 
   return (
     <ModalWithForm
