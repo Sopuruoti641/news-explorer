@@ -18,6 +18,7 @@
 }
 
 .mobileMenuModal__home-link {
+  font-family: Roboto, Arial, Helvetica, sans-serif;
   font-weight: 500;
   font-size: 18px;
   line-height: 56px;
@@ -47,6 +48,7 @@
 }
 
 .mobileMenuModal__saved-link {
+  font-family: Roboto, Arial, Helvetica, sans-serif;
   font-weight: 500;
   font-size: 18px;
   line-height: 18pxpx;

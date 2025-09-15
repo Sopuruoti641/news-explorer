@@ -24,6 +24,7 @@
 
 .about__title {
   margin: 0 0 24px;
+  font-family: Roboto Slab, Arial, Helvetica, sans-serif;
   font-weight: 400;
   font-size: 40px;
   line-height: 46px;
@@ -31,6 +32,7 @@
 }
 
 .about__paragraph {
+  font-family: Roboto, Arial, Helvetica, sans-serif;
   font-weight: 400;
   font-size: 18px;
   line-height: 24px;

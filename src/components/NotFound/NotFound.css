@@ -10,6 +10,7 @@
 }
 
 .notFound__title {
+  font-family: Roboto Slab, Arial, Helvetica, sans-serif;
   font-weight: 400;
   font-size: 26px;
   line-height: 30px;
@@ -19,6 +20,7 @@
 }
 
 .notFound__text {
+  font-family: Roboto, Arial, Helvetica, sans-serif;
   font-weight: 400;
   font-size: 18px;
   line-height: 24px;

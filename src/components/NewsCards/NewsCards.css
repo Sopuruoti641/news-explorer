@@ -10,6 +10,7 @@
 }
 
 .news-cards__title {
+  font-family: Roboto Slab, Arial, Helvetica, sans-serif;
   font-weight: 400;
   font-size: 40px;
   line-height: 46px;
@@ -37,7 +38,6 @@
   border-radius: 80px;
   border: none;
   background-color: #ffffff;
-  cursor: pointer;
 }
 
 .news-cards__show-more-btn:hover {

@@ -22,6 +22,7 @@
   padding-right: 160px;
   border: 1px solid #d1d2d6;
   border-radius: 100px;
+  font-family: Roboto, Arial, Helvetica, sans-serif;
   font-size: 16px;
   line-height: 22px;
   color: #1a1b22;
@@ -41,6 +42,7 @@
   background-color: #2f71ef;
   border: none;
   border-radius: 100px;
+  font-family: Roboto, Arial, Helvetica, sans-serif;
   font-size: 18px;
   line-height: 24px;
   font-weight: 500;

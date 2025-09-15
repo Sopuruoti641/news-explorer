@@ -64,6 +64,7 @@
 }
 
 .modal__title {
+  font-family: Robot, Arial, Helvetica, sans-serif;
   font-weight: 900;
   font-size: 24px;
   line-height: 100%;
@@ -73,6 +74,7 @@
 .modal__label {
   margin-bottom: 31px;
   color: #2f71e5;
+  font-family: Inter, Arial, Helvetica, sans-serif;
   font-weight: 400;
   font-size: 12px;
   line-height: 100%;
@@ -87,6 +89,7 @@
   background: #2f71e5;
   padding: 0;
   color: #fff;
+  font-family: Roboto, Arial, Helvetica, sans-serif;
   font-weight: 500;
   font-size: 18px;
   line-height: 24px;
@@ -103,6 +106,7 @@
 }
 
 .modal__login-text {
+  font-family: Inter, Arial, Helvetica, sans-serif;
   font-weight: 400;
   font-size: 14px;
   line-height: 100%;
@@ -111,6 +115,7 @@
 }
 
 .modal__button-secondary {
+  font-family: Inter, Arial, Helvetica, sans-serif;
   font-weight: 400;
   font-size: 14px;
   line-height: 100%;
@@ -124,6 +129,7 @@
 
 .modal__error {
   color: #ff0000;
+  font-family: Inter, Arial, Helvetica, sans-serif;
   font-weight: 400;
   font-size: 12px;
   line-height: 100%;
