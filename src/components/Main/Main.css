@@ -1,0 +1,13 @@
+.main {
+  width: 100%;
+  background-color: #f5f6f7;
+}
+
+.main__news-conatiner {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.main__about {
+  background-color: #ffffff;
+}

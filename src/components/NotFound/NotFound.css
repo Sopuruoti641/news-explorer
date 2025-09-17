@@ -1,0 +1,30 @@
+.notFound {
+  background-color: #f5f6f7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.notFound__icon {
+  margin: 86px 0 31.5px;
+}
+
+.notFound__title {
+  font-family: Roboto Slab, Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 30px;
+  text-align: center;
+  margin: 0 0 16px;
+  color: #1a1b22;
+}
+
+.notFound__text {
+  font-family: Roboto, Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+  text-align: center;
+  color: #b6bcbf;
+  margin: 0 0 80px;
+}

@@ -1,0 +1,282 @@
+.newsCard {
+  max-width: 400px;
+  height: 576px;
+  box-shadow: 0 10px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  position: relative;
+  box-sizing: border-box;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.newsCard__link-wrapper {
+  text-decoration: none;
+  color: inherit;
+  pointer-events: auto;
+  display: block; /* or whatever you use */
+  position: relative;
+  z-index: 1;
+}
+
+.newsCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.newsCard__image {
+  width: 100%;
+  height: 272px;
+  border-radius: 16px 16px 0 0;
+  margin-bottom: 20px;
+  max-height: 272px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.newsCard__button-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2; /* Must be higher than link */
+  pointer-events: none; /* So only button inside can receive clicks */
+}
+
+.newsCard__save-btn {
+  position: absolute;
+  background-color: #ffffff;
+  width: 40px;
+  height: 40px;
+  top: 24px;
+  right: 24px;
+  border-radius: 8px;
+  border: none;
+  background-image: url(../../assets/Images/news-card-save-btn.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 10; /* higher than the link */
+  pointer-events: auto;
+}
+
+.newsCard__save-btn:hover > .newsCard__tooltip,
+.newsCard__delete-btn:hover > .newsCard__tooltip {
+  display: block;
+}
+
+.newsCard__save-btn:hover {
+  background-image: url(../../assets/Images/news-card-save-btn-hover.svg);
+}
+
+.newsCard__save-btn-saved {
+  background-image: url(../../assets/Images/news-card-save-btn-saved.svg) !important;
+}
+
+.newsCard__delete-btn {
+  background-image: url(../../assets/Images/news-card-delete-btn.svg);
+  position: absolute;
+  background-color: #ffffff;
+  width: 40px;
+  height: 40px;
+  top: 24px;
+  right: 24px;
+  border-radius: 8px;
+  border: none;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 10; /* higher than the link */
+  pointer-events: auto;
+}
+
+.newsCard__delete-btn:hover {
+  background-image: url(../../assets/Images/news-card-delete-btn-hover.svg);
+}
+
+.newsCard__content {
+  padding: 0 24px;
+}
+
+.newsCard__date {
+  margin: 0 0 12px;
+  font-family: Source Sans Pro, Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+  vertical-align: middle;
+  color: #b6bcbf;
+}
+
+.newsCard__title {
+  margin: 0 0 16px;
+  font-family: Roboto Slab, Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 30px;
+  color: #1a1b22;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.newsCard__description {
+  font-family: Roboto, Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 0px;
+  color: #1a1b22;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -moz-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-height: 88px;
+  text-overflow: ellipsis;
+  margin: 0 0 40px;
+}
+
+.newsCard__source {
+  font-family: Roboto Slab, Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #b6bcbf;
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  margin: 0;
+}
+
+.newsCard__tooltip {
+  position: absolute;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0px 10px 22px rgba(0, 0, 0, 0.24);
+  font-family: Roboto, Arial, sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14px;
+  padding: 11px 20px;
+  color: #000000;
+  right: 45px;
+  top: 0;
+  display: none;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.newsCard__keyword {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: Roboto, Arial, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+  color: #000000;
+}
+
+@media screen and (max-width: 768px) {
+  .newsCard {
+    max-width: 224px;
+    height: 420px;
+  }
+  .newsCard__image {
+    height: 150px;
+    margin-bottom: 16px;
+  }
+  .newsCard__save-btn {
+    top: 8px;
+    right: 8px;
+  }
+  .newsCard__delete-btn {
+    top: 8px;
+    right: 8px;
+  }
+  .newsCard__content {
+    padding: 0 16px;
+  }
+  .newsCard__date {
+    margin: 0;
+  }
+  .newsCard__title {
+    font-size: 22px;
+    line-height: 24px;
+    max-height: 72px;
+    -webkit-line-clamp: 3;
+    margin: 12px 0 10px;
+  }
+  .newsCard__description {
+    margin: 0 0 12px;
+  }
+  .newsCard__source {
+    bottom: 16px;
+    left: 16px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .newsCard {
+    width: 100%;
+    min-height: 440px;
+  }
+  .newsCard__image {
+    width: 100%;
+    height: 196px;
+  }
+  .newsCard__save-btn {
+    top: 16px;
+    right: 16px;
+    width: 48px;
+    height: 48px;
+  }
+  .newsCard__delete-btn {
+    top: 16px;
+    right: 16px;
+  }
+  .newsCard__date {
+    margin: 0;
+  }
+  .newsCard__title {
+    max-height: 48px;
+    -webkit-line-clamp: 2;
+    margin: 10px 0 14px;
+  }
+  .newsCard__description {
+    margin: 0;
+  }
+  .newsCard__source {
+    margin-top: 8px;
+  }
+  .newsCard__keyword {
+    top: 16px;
+    left: 16px;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .newsCard__save-btn:hover {
+    background-image: url(../../assets/Images/news-card-save-btn.svg) !important;
+  }
+
+  .newsCard__delete-btn:hover {
+    background-image: url(../../assets/Images/news-card-delete-btn.svg) !important;
+  }
+
+  .newsCard__tooltip {
+    display: none !important;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .newsCard:hover {
+  }
+}
